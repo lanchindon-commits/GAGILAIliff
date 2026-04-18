@@ -199,45 +199,40 @@
     // ⚠️  請將下方 YOUR_LIFF_ID_HERE 換成你在 LINE Developers
     //     申請到的 LIFF ID（格式：1234567890-AbCdEfGh）
     // ═══════════════════════════════════════════════════════
-    const LIFF_ID = "YOUR_LIFF_ID_HERE";
+   const LIFF_ID = "2009826792-CwXGz5df";
 
-    // ── LIFF 全域變數（供送出預約時帶入）──
-    window.lineUserId   = "";   // ← LINE User ID（最關鍵，用於 Make 回傳訊息）
-    window.lineUserName = "";   // ← LINE 顯示名稱
+window.lineUserId = "";
+window.lineUserName = "";
 
-    // ── LIFF 初始化（非 LINE 環境也能正常使用表單）──
-    async function initLiff() {
-      if (!LIFF_ID || LIFF_ID === "YOUR_LIFF_ID_HERE") {
-        console.warn("⚠️ 尚未設定 LIFF_ID，lineUserId 將為空白");
-        return;
-      }
-      try {
-        await liff.init({ liffId: "2009826792-CwXGz5df" });
+async function initLiff() {
+  if (!LIFF_ID) {
+    console.warn("⚠️ 尚未設定 LIFF_ID，lineUserId 將為空白");
+    return;
+  }
 
-        if (!liff.isLoggedIn()) {
-          // 自動導向 LINE 登入（LIFF 環境內才會觸發）
-          liff.login({ redirectUri: location.href });
-          return;
-        }
+  try {
+    await liff.init({ liffId: LIFF_ID });
 
-        const profile = await liff.getProfile();
-        window.lineUserId   = profile.userId;       // ← 取得 User ID ✅
-        window.lineUserName = profile.displayName;  // ← 取得顯示名稱 ✅
-
-        console.log("✅ LIFF 已取得 userId:", window.lineUserId);
-        console.log("✅ LIFF 已取得 userName:", window.lineUserName);
-
-        // 若姓名欄位是空的，自動帶入 LINE 顯示名稱（方便用戶）
-        const nameInput = document.getElementById('custName');
-        if (nameInput && !nameInput.value) {
-          nameInput.value = window.lineUserName;
-        }
-
-      } catch (err) {
-        // 非 LINE 內建瀏覽器（一般電腦瀏覽器）→ 靜默忽略，表單仍可正常使用
-        console.warn("LIFF 初始化略過（非 LINE 環境）:", err.message);
-      }
+    if (!liff.isLoggedIn()) {
+      liff.login({ redirectUri: location.href });
+      return;
     }
+
+    const profile = await liff.getProfile();
+    window.lineUserId = profile.userId;
+    window.lineUserName = profile.displayName;
+
+    console.log("✅ LIFF 已取得 userId:", window.lineUserId);
+    console.log("✅ LIFF 已取得 userName:", window.lineUserName);
+
+    const nameInput = document.getElementById("custName");
+    if (nameInput && !nameInput.value) {
+      nameInput.value = window.lineUserName;
+    }
+  } catch (err) {
+    console.warn("LIFF 初始化失敗：", err);
+  }
+}
 
     // ── 原有邏輯（完全不變）──
     let selectedStation = 1;
