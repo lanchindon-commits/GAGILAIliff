@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GAGILAI 自助保養預約 - 雲端同步版</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- ✅ 新增：LIFF SDK（必須在 Firebase module 之前載入） -->
+  <!-- ✅ LIFF SDK（必須在 Firebase module 之前載入） -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, deleteDoc, doc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
     const firebaseConfig = {
       apiKey: "AIzaSyBppScieE7fx377m7KA4Jw9BB0fbZ5ptvo",
       authDomain: "gagilai.firebaseapp.com",
@@ -23,11 +20,9 @@
       appId: "1:113129780096:web:bc56b0d8b27a7b6a9d0765",
       measurementId: "G-1BV1SLQ29M"
     };
-
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
-
     window.db = db;
     window.auth = auth;
     window.fb_doc = doc;
@@ -36,7 +31,6 @@
     window.fb_addDoc = addDoc;
     window.bookedData = [];
     window.makeWebhookUrl = "https://hook.us2.make.com/6fffp9x9xotq43eyo5f0t4k7j402l0e0";
-
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         await signInAnonymously(auth);
@@ -53,7 +47,6 @@
       }
     });
   </script>
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
     body { font-family: 'Noto Sans TC', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -63,17 +56,13 @@
     .item-checkbox:checked + .item-label { border-color: #2563eb; background-color: #eff6ff; color: #1e40af; }
   </style>
 </head>
-
 <body class="bg-gray-50 min-h-screen text-gray-800">
-
   <div id="bookingPage">
     <div class="bg-white border-b py-6 text-center shadow-sm">
       <h1 class="text-3xl font-black tracking-tighter">GAGILAI <span class="text-blue-600">RESERVATION</span></h1>
       <p class="text-gray-400 text-xs font-bold mt-1 uppercase tracking-widest">自己的愛車 自己來</p>
     </div>
-
     <div class="max-w-xl mx-auto px-4 py-6 space-y-6 pb-32">
-
       <div class="bg-blue-600 rounded-3xl p-6 text-white shadow-xl flex justify-between items-center overflow-hidden relative">
         <div class="z-10">
           <p class="text-blue-200 text-xs font-bold mb-1">場地位置</p>
@@ -87,16 +76,20 @@
           開啟導航
         </a>
       </div>
-
       <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 space-y-8">
-
         <section>
           <label class="block text-sm font-black text-gray-500 mb-3 ml-1 uppercase tracking-wider">01. 選擇預約日期 (明日起 30 天內)</label>
           <input type="date" id="reservationDate"
             class="w-full p-4 bg-gray-50 border-2 border-transparent focus:border-blue-500 rounded-2xl font-black text-lg outline-none transition-all"
             onchange="handleDateChange()">
+          <!-- ✅ 新增：公休提示文字 -->
+          <p class="mt-2 ml-1 text-xs font-bold text-red-500 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            本店週六、週日公休 (Sat & Sun Closed)
+          </p>
         </section>
-
         <section>
           <label class="block text-sm font-black text-gray-500 mb-3 ml-1 uppercase tracking-wider">02. 選擇工台與時段 (一格 30min)</label>
           <div class="grid grid-cols-2 gap-3 mb-4">
@@ -114,7 +107,6 @@
             </div>
           </div>
         </section>
-
         <section>
           <label class="block text-sm font-black text-gray-500 mb-3 ml-1 uppercase tracking-wider">03. 保養維修項目 (可複選)</label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -128,7 +120,6 @@
             <div class="relative"><input type="checkbox" name="item" value="其他" id="item8" class="hidden item-checkbox" onchange="if(this.checked) alert('選填其他項目，請在下方備註欄註明具體需求喔！')"><label for="item8" class="item-label flex items-center p-3 bg-gray-50 rounded-xl cursor-pointer border-2 border-transparent font-bold text-sm transition-all">其他 (請註明在備註欄)</label></div>
           </div>
         </section>
-
         <section class="space-y-3">
           <label class="block text-sm font-black text-gray-500 mb-1 ml-1 uppercase tracking-wider">04. 聯絡資料</label>
           <input type="text" id="custName" placeholder="姓名 (必填)" class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold">
@@ -141,11 +132,9 @@
           <textarea id="custNote" placeholder="備註事項 (選填，如勾選「其他」請在此註明具體需求)" rows="3"
             class="w-full p-4 bg-gray-50 rounded-2xl outline-none focus:ring-2 ring-blue-500 font-bold resize-none"></textarea>
         </section>
-
         <button id="submitBtn" onclick="submitReservation()"
           class="w-full bg-blue-600 text-white py-5 rounded-3xl font-black text-xl shadow-xl hover:bg-blue-700 active:scale-95 transition-all">送出預約</button>
       </div>
-
       <div class="bg-green-500 rounded-3xl p-6 text-white shadow-lg flex items-center justify-between">
         <div class="flex items-center">
           <div class="bg-white p-2 rounded-2xl mr-4">
@@ -161,14 +150,11 @@
         <a href="https://lin.ee/vX0jI6P" target="_blank"
           class="bg-white text-green-600 px-4 py-2 rounded-xl font-black text-xs shadow-sm">加入好友</a>
       </div>
-
       <div class="text-center opacity-30 py-8">
         <button onclick="showAdminAuth()" class="text-[10px] text-gray-400 underline tracking-widest uppercase">Admin Access</button>
       </div>
-
     </div>
   </div>
-
   <!-- 管理者登入頁 -->
   <div id="adminAuthPage" class="hidden flex items-center justify-center p-6 bg-white/95 backdrop-blur-md">
     <div class="w-full max-w-xs text-center">
@@ -179,7 +165,6 @@
       <button onclick="hideAdminAuth()" class="text-gray-400 text-sm font-bold py-2">取消返回</button>
     </div>
   </div>
-
   <!-- 管理後台頁 -->
   <div id="adminPage" class="hidden bg-gray-50 min-h-screen">
     <div class="max-w-xl mx-auto p-4 pb-20">
@@ -193,38 +178,30 @@
       <div id="adminList" class="space-y-4"></div>
     </div>
   </div>
-
   <script>
     // ═══════════════════════════════════════════════════════
     // ⚠️  請將下方 YOUR_LIFF_ID_HERE 換成你在 LINE Developers
     //     申請到的 LIFF ID（格式：1234567890-AbCdEfGh）
     // ═══════════════════════════════════════════════════════
    const LIFF_ID = "2009826792-CwXGz5df";
-
 window.lineUserId = "";
 window.lineUserName = "";
-
 async function initLiff() {
   if (!LIFF_ID) {
     console.warn("⚠️ 尚未設定 LIFF_ID，lineUserId 將為空白");
     return;
   }
-
   try {
     await liff.init({ liffId: LIFF_ID });
-
     if (!liff.isLoggedIn()) {
       liff.login({ redirectUri: location.href });
       return;
     }
-
     const profile = await liff.getProfile();
     window.lineUserId = profile.userId;
     window.lineUserName = profile.displayName;
-
     console.log("✅ LIFF 已取得 userId:", window.lineUserId);
     console.log("✅ LIFF 已取得 userName:", window.lineUserName);
-
     const nameInput = document.getElementById("custName");
     if (nameInput && !nameInput.value) {
       nameInput.value = window.lineUserName;
@@ -233,18 +210,46 @@ async function initLiff() {
     console.warn("LIFF 初始化失敗：", err);
   }
 }
-
-    // ── 原有邏輯（完全不變）──
+    // ── 原有邏輯 + 週末防護 ──
     let selectedStation = 1;
     let selectedSlots = new Set();
     const PRICE_PER_SLOT = 100;
 
+    // ✅ 新增：判斷是否為週六(6) 或週日(0)
+    // 用 'T00:00:00' 強制當地時區解讀，避免 iOS Safari 把 YYYY-MM-DD 當 UTC 解析
+    function isWeekend(dateStr) {
+      if (!dateStr) return false;
+      const d = new Date(dateStr + 'T00:00:00');
+      const day = d.getDay();
+      return day === 0 || day === 6;
+    }
+
+    // ✅ 新增：把日期往後推到下一個非週末的日子
+    function nextWeekday(date) {
+      const d = new Date(date);
+      while (d.getDay() === 0 || d.getDay() === 6) {
+        d.setDate(d.getDate() + 1);
+      }
+      return d;
+    }
+
+    function formatDate(d) {
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
     window.handleDateChange = () => {
+      const dateInput = document.getElementById('reservationDate');
+      const val = dateInput.value;
+      // ✅ 新增：選到週六日 → 跳警告 + 自動跳到下個工作日
+      if (isWeekend(val)) {
+        alert("⚠️ 本店週六、週日公休\n已為您自動調整到下一個營業日");
+        const fixed = nextWeekday(new Date(val + 'T00:00:00'));
+        dateInput.value = formatDate(fixed);
+      }
       selectedSlots.clear();
       updatePrice();
       window.generateTimeSlots();
     };
-
     window.selectStation = (num) => {
       selectedStation = num;
       document.querySelectorAll('.station-btn').forEach(b => b.classList.remove('border-blue-600', 'bg-blue-50', 'text-blue-600'));
@@ -253,18 +258,23 @@ async function initLiff() {
       updatePrice();
       window.generateTimeSlots();
     };
-
     function updatePrice() {
       const count = selectedSlots.size;
       document.getElementById('slotCounter').innerText = `已選擇 ${count} 個時段 (${count * 30} 分鐘)`;
       document.getElementById('totalPriceDisplay').innerText = `$${count * PRICE_PER_SLOT}`;
     }
-
     window.generateTimeSlots = () => {
       const grid = document.getElementById('timeSlotsGrid');
       if (!grid) return;
       grid.innerHTML = '';
       const dateVal = document.getElementById('reservationDate').value;
+
+      // ✅ 新增：如果日期為週末（理論上 handleDateChange 會擋，但雙保險）
+      if (isWeekend(dateVal)) {
+        grid.innerHTML = '<div class="col-span-4 text-center py-8 text-red-500 font-bold text-sm">本店週六、週日公休</div>';
+        return;
+      }
+
       for (let t = 9; t <= 19.5; t += 0.5) {
         const timeString = `${Math.floor(t).toString().padStart(2, '0')}:${(t % 1 === 0) ? '00' : '30'}`;
         const isBooked = window.bookedData.some(b => b.date === dateVal && b.station === selectedStation && b.slots.includes(timeString));
@@ -283,7 +293,6 @@ async function initLiff() {
         grid.appendChild(btn);
       }
     };
-
     window.submitReservation = async () => {
       const date  = document.getElementById('reservationDate').value;
       const name  = document.getElementById('custName').value;
@@ -293,12 +302,15 @@ async function initLiff() {
       const plate = document.getElementById('custPlate').value;
       const note  = document.getElementById('custNote').value || "";
       const items = Array.from(document.querySelectorAll('input[name="item"]:checked')).map(i => i.value);
-
       if (!date || selectedSlots.size === 0 || !name || !phone || !email || !model || !plate) {
         alert("⚠️ 請填妥所有資訊"); return;
       }
+      // ✅ 新增：送出前最後一道防線
+      if (isWeekend(date)) {
+        alert("⚠️ 本店週六、週日公休，請改選其他日期");
+        return;
+      }
       if (!email.includes('@')) { alert("⚠️ Email 格式錯誤"); return; }
-
       const resData = {
         date,
         station     : selectedStation,
@@ -311,19 +323,16 @@ async function initLiff() {
         note,
         slots       : Array.from(selectedSlots).sort(),
         totalPrice  : selectedSlots.size * PRICE_PER_SLOT,
-        // ✅ 新增：LINE 身份識別（由 LIFF 自動收集）
+        // ✅ LINE 身份識別（由 LIFF 自動收集）
         lineUserId  : window.lineUserId,    // LINE User ID（供 Make 回傳確認訊息用）
         lineUserName: window.lineUserName,  // LINE 顯示名稱
         createdAt   : new Date().toISOString()
       };
-
       try {
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
         btn.innerText = "傳送中...";
-
         await window.fb_addDoc(window.fb_collection(window.db, 'reservations'), resData);
-
         if (window.makeWebhookUrl) {
           await fetch(window.makeWebhookUrl, {
             method : 'POST',
@@ -331,7 +340,6 @@ async function initLiff() {
             body   : JSON.stringify(resData)
           }).catch(e => console.warn(e));
         }
-
         alert("🎉 預約成功！");
         location.reload();
       } catch (e) {
@@ -341,13 +349,11 @@ async function initLiff() {
         btn.innerText = "送出預約";
       }
     };
-
     window.showAdminAuth = () => {
       document.getElementById('adminAuthPage').classList.remove('hidden');
       document.getElementById('adminPwdInput').focus();
     };
     window.hideAdminAuth = () => document.getElementById('adminAuthPage').classList.add('hidden');
-
     window.checkAdminPwd = () => {
       if (document.getElementById('adminPwdInput').value === "4318") {
         document.getElementById('adminAuthPage').classList.add('hidden');
@@ -357,7 +363,6 @@ async function initLiff() {
         alert("PIN 碼錯誤");
       }
     };
-
     window.renderAdminList = () => {
       const list = document.getElementById('adminList');
       if (!list) return;
@@ -389,7 +394,6 @@ async function initLiff() {
         list.appendChild(div);
       });
     };
-
     window.deleteRes = async (id, btn) => {
       if (!confirm("確定要刪除這筆預約嗎？")) return;
       btn.innerText = "處理中...";
@@ -400,7 +404,6 @@ async function initLiff() {
         alert("刪除失敗：" + e.message);
       }
     };
-
     window.onload = () => {
       const dateInput = document.getElementById('reservationDate');
       const now = new Date();
@@ -408,12 +411,14 @@ async function initLiff() {
       tomorrow.setDate(now.getDate() + 1);
       const maxDate = new Date(now);
       maxDate.setDate(now.getDate() + 30);
-      const formatDate = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
+      // ✅ 修改：預設日期跳過週末
+      const defaultDate = nextWeekday(tomorrow);
+
       dateInput.min   = formatDate(tomorrow);
       dateInput.max   = formatDate(maxDate);
-      dateInput.value = formatDate(tomorrow);
+      dateInput.value = formatDate(defaultDate);
       window.selectStation(1);
-
       // ✅ 啟動 LIFF 初始化（在最後執行，不影響頁面載入速度）
       initLiff();
     };
