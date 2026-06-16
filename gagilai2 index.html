@@ -256,7 +256,7 @@
         window.showAdminAuth = () => { document.getElementById('adminAuthPage').classList.remove('hidden'); document.getElementById('adminPwdInput').focus(); };
         window.hideAdminAuth = () => document.getElementById('adminAuthPage').classList.add('hidden');
 
-        // 密碼以 SHA-256 雜湊儲存，原始碼不含明文
+        
         const ADMIN_HASH = "b711ed9bc1eae835271290b5bfd60db028eb157e97b71d177bf9864b4ae31d46";
         async function sha256(str) {
             const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
